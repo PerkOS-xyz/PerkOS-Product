@@ -236,6 +236,15 @@ export default async function Home() {
                   </div>
                 </div>
 
+                <div className="flex items-center gap-2 py-2 px-3 rounded-lg bg-white/[0.03] border border-white/5">
+                  <span className="text-xs text-white/50">Accepted:</span>
+                  <span className="text-xs font-semibold text-white/80">USDC</span>
+                  <span className="text-white/20">|</span>
+                  <span className="text-xs font-semibold text-perkos-amber">$PerkOS*</span>
+                  <span className="text-white/20">|</span>
+                  <span className="text-xs font-semibold text-perkos-pink">$SelfClaw*</span>
+                </div>
+
                 <div className="pt-2 flex flex-col sm:flex-row gap-3">
                   <Button className="flex-1 bg-perkos-purple hover:bg-perkos-magenta font-semibold h-11" asChild>
                     <Link href="https://stack.perkos.xyz">Launch Stack App</Link>
@@ -318,6 +327,15 @@ export default async function Home() {
                       <span className="text-white/80">Built-in x402 micropayments</span>
                     </li>
                   </ul>
+
+                  <div className="flex items-center gap-2 py-2 px-3 rounded-lg bg-white/[0.03] border border-white/5">
+                    <span className="text-xs text-white/50">Accepted:</span>
+                    <span className="text-xs font-semibold text-white/80">USDC</span>
+                    <span className="text-white/20">|</span>
+                    <span className="text-xs font-semibold text-perkos-amber">$PerkOS*</span>
+                    <span className="text-white/20">|</span>
+                    <span className="text-xs font-semibold text-perkos-pink">$SelfClaw*</span>
+                  </div>
 
                   <div className="pt-3 flex gap-3">
                     <Button className="flex-1 bg-perkos-gradient/50 font-semibold cursor-not-allowed" disabled>
@@ -485,6 +503,15 @@ export default async function Home() {
                   </div>
                 </div>
 
+                <div className="flex items-center gap-2 py-2 px-3 rounded-lg bg-white/[0.03] border border-white/5">
+                  <span className="text-xs text-white/50">Accepted:</span>
+                  <span className="text-xs font-semibold text-white/80">USDC</span>
+                  <span className="text-white/20">|</span>
+                  <span className="text-xs font-semibold text-perkos-amber">$PerkOS*</span>
+                  <span className="text-white/20">|</span>
+                  <span className="text-xs font-semibold text-perkos-pink">$SelfClaw*</span>
+                </div>
+
                 <div className="pt-2 flex flex-col sm:flex-row gap-3">
                   <Button className="flex-1 bg-perkos-amber hover:bg-perkos-yellow text-black font-semibold h-11" asChild>
                     <Link href="https://swarm.perkos.xyz">Launch Swarm App</Link>
@@ -498,6 +525,19 @@ export default async function Home() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Token Info Footnote */}
+            <div className="mt-6 pt-4 border-t border-white/10">
+              <p className="text-sm text-muted-foreground mb-3">
+                * <span className="text-perkos-amber font-medium">$PerkOS</span> and <span className="text-perkos-pink font-medium">$SelfClaw</span> available on Base and Celo.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-x-8 gap-y-1.5 text-xs font-mono text-white/40">
+                <Link href="https://app.uniswap.org/explore/tokens/base/0xf714e60f85497d70508f7e356b5db80e64539ba3" target="_blank" rel="noopener noreferrer" className="hover:text-perkos-amber transition-colors">$PerkOS Base: 0xF714E60f...39BA3</Link>
+                <Link href="https://app.uniswap.org/explore/tokens/celo/0xb7ba43fbd4f2e85fce929f7d4dfe3905ae846a46" target="_blank" rel="noopener noreferrer" className="hover:text-perkos-amber transition-colors">$PerkOS Celo: 0xb7Ba43fB...846A46</Link>
+                <Link href="https://app.uniswap.org/explore/tokens/base/0x9ae5f51d81ff510bf961218f833f79d57bfbab07" target="_blank" rel="noopener noreferrer" className="hover:text-perkos-pink transition-colors">$SelfClaw Base: 0x9ae5f51d...bab07</Link>
+                <Link href="https://app.uniswap.org/explore/tokens/celo/0xcd88f99adf75a9110c0bcd22695a32a20ec54ecb" target="_blank" rel="noopener noreferrer" className="hover:text-perkos-pink transition-colors">$SelfClaw Celo: 0xCD88f99A...4ECb</Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -843,9 +883,14 @@ export default async function Home() {
                   </p>
                 </div>
 
-                <p className="text-xs text-muted-foreground pt-2 border-t border-white/10">
-                  Pay with USDC • Buy extra credits anytime • ~75% gross margin
-                </p>
+                <div className="pt-2 border-t border-white/10 space-y-1.5">
+                  <p className="text-xs text-perkos-amber font-medium">
+                    Earn 5% back in <span className="font-semibold">$PerkOS</span> tokens on every package purchase
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Pay with USDC, $PerkOS or $SelfClaw* • Buy extra credits anytime • ~75% gross margin
+                  </p>
+                </div>
               </CardContent>
             </Card>
 
@@ -927,7 +972,7 @@ export default async function Home() {
                 </div>
 
                 <p className="text-xs text-muted-foreground pt-2 border-t border-white/10">
-                  L2 transaction fees paid by users • ~80% gross margin
+                  Pay with USDC, $PerkOS or $SelfClaw* • L2 fees paid by users • ~80% margin
                 </p>
               </CardContent>
             </Card>
@@ -1033,10 +1078,41 @@ export default async function Home() {
                 </div>
 
                 <p className="text-xs text-muted-foreground pt-2 border-t border-white/10">
-                  Pay with USDC • Scale per agent • ~85% gross margin
+                  Pay with USDC, $PerkOS or $SelfClaw* • Scale per agent • ~85% gross margin
                 </p>
               </CardContent>
             </Card>
+          </div>
+
+          {/* Token Contract Addresses Footnote */}
+          <div className="max-w-6xl mx-auto mt-8 pt-6 border-t border-white/10">
+            <p className="text-sm text-muted-foreground mb-4">
+              * <span className="text-perkos-amber font-medium">$PerkOS</span> and <span className="text-perkos-pink font-medium">$SelfClaw</span> are available on Base and Celo networks.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div className="space-y-1.5">
+                <p className="font-semibold text-perkos-amber">$PerkOS</p>
+                <div className="flex items-center gap-2">
+                  <span className="text-muted-foreground shrink-0">Base:</span>
+                  <Link href="https://app.uniswap.org/explore/tokens/base/0xf714e60f85497d70508f7e356b5db80e64539ba3" target="_blank" rel="noopener noreferrer" className="font-mono text-white/60 break-all hover:text-perkos-amber transition-colors">0xF714E60f85497D70508F7E356b5DB80e64539BA3</Link>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-muted-foreground shrink-0">Celo:</span>
+                  <Link href="https://app.uniswap.org/explore/tokens/celo/0xb7ba43fbd4f2e85fce929f7d4dfe3905ae846a46" target="_blank" rel="noopener noreferrer" className="font-mono text-white/60 break-all hover:text-perkos-amber transition-colors">0xb7Ba43fBD4F2E85FCE929f7d4DFE3905Ae846A46</Link>
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <p className="font-semibold text-perkos-pink">$SelfClaw</p>
+                <div className="flex items-center gap-2">
+                  <span className="text-muted-foreground shrink-0">Base:</span>
+                  <Link href="https://app.uniswap.org/explore/tokens/base/0x9ae5f51d81ff510bf961218f833f79d57bfbab07" target="_blank" rel="noopener noreferrer" className="font-mono text-white/60 break-all hover:text-perkos-pink transition-colors">0x9ae5f51d81ff510bf961218f833f79d57bfbab07</Link>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-muted-foreground shrink-0">Celo:</span>
+                  <Link href="https://app.uniswap.org/explore/tokens/celo/0xcd88f99adf75a9110c0bcd22695a32a20ec54ecb" target="_blank" rel="noopener noreferrer" className="font-mono text-white/60 break-all hover:text-perkos-pink transition-colors">0xCD88f99Adf75A9110c0bcd22695A32A20eC54ECb</Link>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
