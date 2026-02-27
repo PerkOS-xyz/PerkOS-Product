@@ -21,10 +21,15 @@
   --perkos-cyan: #06B6D4;
   --perkos-teal: #14B8A6;
 
+  /* Swarm Brand Color */
+  --perkos-amber: #F59E0B;
+  --perkos-yellow: #EAB308;
+
   /* Gradient */
   --perkos-gradient: linear-gradient(135deg, #FD8F50 0%, #EB1B69 100%);
   --perkos-gradient-reverse: linear-gradient(135deg, #EB1B69 0%, #FD8F50 100%);
   --perkos-gradient-aura: linear-gradient(135deg, #06B6D4 0%, #14B8A6 100%);
+  --perkos-gradient-swarm: linear-gradient(135deg, #F59E0B 0%, #EAB308 100%);
 }
 
 @theme inline {
@@ -75,6 +80,8 @@
   --color-perkos-magenta: var(--perkos-magenta);
   --color-perkos-cyan: var(--perkos-cyan);
   --color-perkos-teal: var(--perkos-teal);
+  --color-perkos-amber: var(--perkos-amber);
+  --color-perkos-yellow: var(--perkos-yellow);
 }
 
 /* Dark theme as default (like thirdweb) */
@@ -177,9 +184,18 @@
   box-shadow: 0 0 40px rgba(118, 67, 123, 0.3);
 }
 
+.glow-amber {
+  box-shadow: 0 0 40px rgba(245, 158, 11, 0.3);
+}
+
 /* Aura gradient background */
 .bg-perkos-gradient-aura {
   background: var(--perkos-gradient-aura);
+}
+
+/* Swarm gradient background */
+.bg-perkos-gradient-swarm {
+  background: var(--perkos-gradient-swarm);
 }
 
 /* Product card specific hover states */
@@ -196,6 +212,11 @@
 .product-card-stack:hover {
   border-color: var(--perkos-purple) !important;
   box-shadow: 0 0 40px rgba(118, 67, 123, 0.2), 0 0 80px rgba(118, 67, 123, 0.1);
+}
+
+.product-card-swarm:hover {
+  border-color: var(--perkos-amber) !important;
+  box-shadow: 0 0 40px rgba(245, 158, 11, 0.2), 0 0 80px rgba(245, 158, 11, 0.1);
 }
 
 /* Ecosystem connection lines */

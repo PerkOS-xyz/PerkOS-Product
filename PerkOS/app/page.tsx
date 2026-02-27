@@ -141,6 +141,7 @@ export default async function Home() {
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-perkos-purple/8 rounded-full blur-3xl" />
           <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-perkos-pink/5 rounded-full blur-3xl" />
           <div className="absolute bottom-1/4 right-1/3 w-96 h-96 bg-perkos-cyan/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/6 left-1/3 w-96 h-96 bg-perkos-amber/5 rounded-full blur-3xl" />
         </div>
 
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
@@ -151,7 +152,7 @@ export default async function Home() {
               <span className="text-xs font-medium tracking-wider uppercase text-white/70">The PerkOS Ecosystem</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 px-4 tracking-tight">
-              <span className="text-perkos-purple">Stack</span> powers. <span className="text-perkos-orange">Spark</span> ignites. <span className="text-perkos-cyan">Aura</span> serves.
+              <span className="text-perkos-purple">Stack</span> powers. <span className="text-perkos-orange">Spark</span> ignites. <span className="text-perkos-cyan">Aura</span> serves. <span className="text-perkos-amber">Swarm</span> orchestrates.
             </h2>
             <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto px-4">
               One infrastructure. Endless possibilities. Built for the agentic economy.
@@ -396,6 +397,107 @@ export default async function Home() {
                 </CardContent>
               </Card>
             </div>
+
+            {/* Connection indicator - Swarm */}
+            <div className="hidden lg:flex justify-center items-center py-4 relative">
+              <div className="flex items-center gap-4">
+                <div className="h-px w-32 bg-gradient-to-r from-transparent via-perkos-pink/30 to-perkos-amber/30" />
+                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-perkos-amber/10 border border-perkos-amber/20">
+                  <svg className="w-4 h-4 text-perkos-amber" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
+                  <span className="text-xs font-medium text-perkos-amber/80">Orchestrates</span>
+                </div>
+                <div className="h-px w-32 bg-gradient-to-r from-perkos-amber/30 via-perkos-cyan/30 to-transparent" />
+              </div>
+            </div>
+
+            {/* Swarm Card - Full Width (Fleet Orchestration) */}
+            <Card className="relative overflow-hidden border-2 border-perkos-amber/30 bg-gradient-to-br from-perkos-amber/[0.08] via-white/[0.02] to-transparent backdrop-blur-sm transition-all duration-500 product-card-swarm group" id="swarm">
+              {/* Decorative elements */}
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-perkos-amber/50 to-transparent" />
+              <div className="absolute top-0 left-1/4 w-48 h-48 bg-gradient-to-br from-perkos-amber/20 to-transparent rounded-full blur-2xl" />
+              <div className="absolute top-0 right-1/4 w-48 h-48 bg-gradient-to-bl from-perkos-yellow/15 to-transparent rounded-full blur-2xl" />
+              <div className="absolute bottom-0 left-0 w-40 h-40 bg-gradient-to-tr from-perkos-amber/10 to-transparent rounded-tr-full" />
+              <div className="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-tl from-perkos-yellow/10 to-transparent rounded-tl-full" />
+
+              <CardHeader className="pb-4">
+                <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-2">
+                  <div className="flex items-center gap-5">
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-perkos-amber/40 rounded-2xl blur-2xl group-hover:blur-3xl transition-all scale-150" />
+                      <Image
+                        src="/images/Swarm-icon.png"
+                        alt="Swarm"
+                        width={72}
+                        height={72}
+                        className="rounded-2xl relative z-10"
+                      />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-3 mb-1">
+                        <CardTitle className="text-3xl sm:text-4xl font-bold tracking-tight">Swarm</CardTitle>
+                        <span className="product-badge bg-perkos-amber/20 text-perkos-amber border border-perkos-amber/30">Fleet Orchestration</span>
+                      </div>
+                      <CardDescription className="text-base text-perkos-amber font-medium">Enterprise AI fleet orchestration for autonomous business operations</CardDescription>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="product-badge bg-white/5 text-white/70 border border-white/10">6 Agent Types</span>
+                    <span className="product-badge bg-white/5 text-white/70 border border-white/10">2 Chains</span>
+                    <span className="product-badge bg-white/5 text-white/70 border border-white/10">Real-time WSS</span>
+                  </div>
+                </div>
+              </CardHeader>
+
+              <CardContent className="space-y-6">
+                <p className="text-muted-foreground leading-relaxed max-w-4xl">
+                  Complete command center for deploying and managing AI agent fleets. Swarm provides real-time communication,
+                  task orchestration, project management, and agent onboarding that powers your autonomous business operations. Multi-chain by default.
+                </p>
+
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 py-2">
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-white/[0.02] border border-white/5">
+                    <span className="text-perkos-amber text-xl">📡</span>
+                    <div>
+                      <div className="font-medium text-sm text-white/90">WSS Hub</div>
+                      <div className="text-xs text-white/50">Secure real-time messaging</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-white/[0.02] border border-white/5">
+                    <span className="text-perkos-amber text-xl">🐝</span>
+                    <div>
+                      <div className="font-medium text-sm text-white/90">Fleet Manager</div>
+                      <div className="text-xs text-white/50">Agent orchestration</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-white/[0.02] border border-white/5">
+                    <span className="text-perkos-amber text-xl">📋</span>
+                    <div>
+                      <div className="font-medium text-sm text-white/90">Task Board</div>
+                      <div className="text-xs text-white/50">Kanban + on-chain jobs</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-white/[0.02] border border-white/5">
+                    <span className="text-perkos-amber text-xl">🔌</span>
+                    <div>
+                      <div className="font-medium text-sm text-white/90">Swarm Connect</div>
+                      <div className="text-xs text-white/50">Self-installing agent plugin</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-2 flex flex-col sm:flex-row gap-3">
+                  <Button className="flex-1 bg-perkos-amber hover:bg-perkos-yellow text-black font-semibold h-11" asChild>
+                    <Link href="https://swarm.perkos.xyz">Launch Swarm App</Link>
+                  </Button>
+                  <Button variant="outline" className="flex-1 border-perkos-amber/50 text-perkos-amber hover:bg-perkos-amber hover:text-black h-11" asChild>
+                    <Link href="https://github.com/PerkOS-xyz/Swarm">View on GitHub</Link>
+                  </Button>
+                  <Button variant="outline" className="flex-1 border-white/20 text-white/70 hover:bg-white/10 hover:text-white h-11" asChild>
+                    <Link href="https://github.com/PerkOS-xyz/Swarm#readme">Documentation</Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
@@ -637,7 +739,7 @@ export default async function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
             {/* Spark Pricing */}
             <Card className="border-2 border-perkos-pink/50 card-hover">
               <CardHeader>
@@ -826,6 +928,112 @@ export default async function Home() {
 
                 <p className="text-xs text-muted-foreground pt-2 border-t border-white/10">
                   L2 transaction fees paid by users • ~80% gross margin
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Swarm Pricing */}
+            <Card className="border-2 border-perkos-amber/50 card-hover">
+              <CardHeader>
+                <div className="flex items-center gap-2 mb-2">
+                  <Image
+                    src="/images/Swarm-icon.png"
+                    alt="Swarm"
+                    width={40}
+                    height={40}
+                    className="rounded-lg"
+                  />
+                  <CardTitle className="text-2xl">Swarm Pricing</CardTitle>
+                </div>
+                <CardDescription>AI fleet orchestration platform</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Fleet Resources */}
+                <div className="space-y-1.5 pb-3 border-b border-white/10">
+                  <p className="text-xs font-semibold text-perkos-amber uppercase tracking-wide mb-2">Fleet Resources</p>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Agents</span>
+                    <span className="font-mono text-xs">Deployable AI bots</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Projects</span>
+                    <span className="font-mono text-xs">Workspaces + channels</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Members</span>
+                    <span className="font-mono text-xs">Human operators/org</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Hub Messages</span>
+                    <span className="font-mono text-xs">WSS messages/mo</span>
+                  </div>
+                </div>
+
+                {/* Monthly Tiers */}
+                <div className="space-y-2">
+                  <p className="text-xs font-semibold text-perkos-yellow uppercase tracking-wide mb-2">Monthly Plans</p>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <div className="font-semibold">Free</div>
+                      <div className="text-xs text-muted-foreground">3 agents • 1 project • 2 members</div>
+                    </div>
+                    <span className="font-mono font-bold">$0</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <div className="font-semibold">Starter</div>
+                      <div className="text-xs text-muted-foreground">10 agents • 3 projects • 5 members</div>
+                    </div>
+                    <span className="font-mono font-bold">$19</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <div className="font-semibold">Pro</div>
+                      <div className="text-xs text-muted-foreground">50 agents • 10 projects • 15 members</div>
+                    </div>
+                    <span className="font-mono font-bold">$49</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <div className="font-semibold">Scale</div>
+                      <div className="text-xs text-muted-foreground">200 agents • unlimited • 50 members</div>
+                    </div>
+                    <span className="font-mono font-bold">$199</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <div className="font-semibold">Enterprise</div>
+                      <div className="text-xs text-muted-foreground">Unlimited • SLA • dedicated hub</div>
+                    </div>
+                    <span className="font-mono font-bold">Custom</span>
+                  </div>
+                </div>
+
+                {/* Fleet Add-ons */}
+                <div className="space-y-1.5 pt-2 border-t border-white/10">
+                  <p className="text-xs font-semibold text-perkos-peach uppercase tracking-wide mb-2">Fleet Add-ons</p>
+                  <div className="grid grid-cols-1 gap-y-1 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Extra Agents</span>
+                      <span className="font-mono">$2/agent/mo</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">On-chain Tasks</span>
+                      <span className="font-mono">gas fees only</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Dedicated Hub</span>
+                      <span className="font-mono">$99/mo</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Priority Routing</span>
+                      <span className="font-mono">Scale+</span>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="text-xs text-muted-foreground pt-2 border-t border-white/10">
+                  Pay with USDC • Scale per agent • ~85% gross margin
                 </p>
               </CardContent>
             </Card>
