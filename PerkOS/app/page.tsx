@@ -528,10 +528,10 @@ export default async function Home() {
 
             {/* Token Info Footnote */}
             <div className="mt-6 pt-4 border-t border-white/10">
-              <p className="text-xs text-muted-foreground mb-2">
+              <p className="text-sm text-muted-foreground mb-3">
                 * <span className="text-perkos-amber font-medium">$PerkOS</span> and <span className="text-perkos-pink font-medium">$SelfClaw</span> available on Base and Celo.
               </p>
-              <div className="flex flex-col sm:flex-row gap-x-8 gap-y-1 text-[10px] font-mono text-white/40">
+              <div className="flex flex-col sm:flex-row gap-x-8 gap-y-1.5 text-xs font-mono text-white/40">
                 <Link href="https://app.uniswap.org/explore/tokens/base/0xf714e60f85497d70508f7e356b5db80e64539ba3" target="_blank" rel="noopener noreferrer" className="hover:text-perkos-amber transition-colors">$PerkOS Base: 0xF714E60f...39BA3</Link>
                 <Link href="https://app.uniswap.org/explore/tokens/celo/0xb7ba43fbd4f2e85fce929f7d4dfe3905ae846a46" target="_blank" rel="noopener noreferrer" className="hover:text-perkos-amber transition-colors">$PerkOS Celo: 0xb7Ba43fB...846A46</Link>
                 <Link href="https://app.uniswap.org/explore/tokens/base/0x9ae5f51d81ff510bf961218f833f79d57bfbab07" target="_blank" rel="noopener noreferrer" className="hover:text-perkos-pink transition-colors">$SelfClaw Base: 0x9ae5f51d...bab07</Link>
@@ -1086,10 +1086,10 @@ export default async function Home() {
 
           {/* Token Contract Addresses Footnote */}
           <div className="max-w-6xl mx-auto mt-8 pt-6 border-t border-white/10">
-            <p className="text-xs text-muted-foreground mb-3">
+            <p className="text-sm text-muted-foreground mb-4">
               * <span className="text-perkos-amber font-medium">$PerkOS</span> and <span className="text-perkos-pink font-medium">$SelfClaw</span> are available on Base and Celo networks.
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div className="space-y-1.5">
                 <p className="font-semibold text-perkos-amber">$PerkOS</p>
                 <div className="flex items-center gap-2">
