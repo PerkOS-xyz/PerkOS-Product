@@ -298,7 +298,7 @@ export default async function Home() {
                     </div>
                     <div className="flex flex-col items-end gap-2">
                       <span className="product-badge bg-perkos-pink/20 text-perkos-pink border border-perkos-pink/30">For Creators</span>
-                      <span className="product-badge bg-perkos-orange/20 text-perkos-orange border border-perkos-orange/30 animate-pulse">Coming Soon</span>
+                      <span className="product-badge bg-perkos-orange/20 text-perkos-orange border border-perkos-orange/30 animate-pulse">Building</span>
                     </div>
                   </div>
                 </CardHeader>
@@ -459,6 +459,7 @@ export default async function Home() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2 flex-wrap">
+                    <span className="product-badge bg-perkos-amber/20 text-perkos-amber border border-perkos-amber/30 animate-pulse">Building</span>
                     <span className="product-badge bg-white/5 text-white/70 border border-white/10">6 Agent Types</span>
                     <span className="product-badge bg-white/5 text-white/70 border border-white/10">2 Chains</span>
                     <span className="product-badge bg-white/5 text-white/70 border border-white/10">Real-time WSS</span>
