@@ -6,11 +6,12 @@ import { ContactForm } from "@/components/contact-form";
 import { CHAIN_DATA } from "@/components/chain-icons";
 import { ContributorsCarousel, Contributor } from "@/components/contributors-carousel";
 import { Header } from "@/components/header";
+import { WaitlistForm } from "@/components/waitlist-form";
 
 async function getContributors(): Promise<Contributor[]> {
   try {
     const response = await fetch("https://stack.perkos.xyz/api/contributors", {
-      cache: "no-store", // Always fetch fresh data
+      cache: "no-store",
     });
     if (!response.ok) return [];
     const data = await response.json();
@@ -20,52 +21,159 @@ async function getContributors(): Promise<Contributor[]> {
   }
 }
 
+const products = [
+  {
+    name: "Stack",
+    icon: "/images/Stack-icon.png",
+    description: "x402 facilitator, payment verification, agent registry, and multi-chain settlement infrastructure.",
+    status: "live" as const,
+    colorClass: "perkos-purple",
+    shadowRgb: "118,67,123",
+    badge: "Core Infrastructure",
+    url: "https://stack.perkos.xyz",
+    github: "https://github.com/PerkOS-xyz/Stack",
+  },
+  {
+    name: "Spark",
+    icon: "/images/Spark-icon.png",
+    description: "No-code AI agent launcher. Deploy intelligent agents with personality across Discord, Telegram, and more.",
+    status: "building" as const,
+    colorClass: "perkos-pink",
+    shadowRgb: "235,27,105",
+    badge: "For Creators",
+    url: "https://spark.perkos.xyz",
+    github: "https://github.com/PerkOS-xyz/Spark",
+  },
+  {
+    name: "Aura",
+    icon: "/images/Aura-icon.png",
+    description: "20 AI endpoints for vision, NLP, and developer tools. Pay per API call with instant micropayments.",
+    status: "live" as const,
+    colorClass: "perkos-cyan",
+    shadowRgb: "6,182,212",
+    badge: "20 APIs",
+    url: "https://aura.perkos.xyz",
+    github: "https://github.com/PerkOS-xyz/PerkOS-Aura",
+  },
+  {
+    name: "Swarm",
+    icon: "/images/Swarm-icon.png",
+    description: "AI fleet orchestration. Real-time communication, task boards, and agent management for organizations.",
+    status: "building" as const,
+    colorClass: "perkos-amber",
+    shadowRgb: "245,158,11",
+    badge: "Fleet Orchestration",
+    url: "https://swarm.perkos.xyz",
+    github: "https://github.com/PerkOS-xyz/Swarm",
+  },
+];
+
+const productColorMap: Record<string, { border: string; borderHover: string; bgFrom: string; line: string; glow: string; text: string; badgeBg: string; badgeBorder: string; btnBg: string; btnBorder: string; btnHoverBg: string }> = {
+  "perkos-purple": {
+    border: "border-perkos-purple/30",
+    borderHover: "hover:border-perkos-purple/60",
+    bgFrom: "from-perkos-purple/[0.08]",
+    line: "via-perkos-purple/50",
+    glow: "bg-perkos-purple/30",
+    text: "text-perkos-purple",
+    badgeBg: "bg-perkos-purple/10",
+    badgeBorder: "border-perkos-purple/20",
+    btnBg: "bg-perkos-purple hover:opacity-90",
+    btnBorder: "border-perkos-purple/50",
+    btnHoverBg: "hover:bg-perkos-purple hover:text-white",
+  },
+  "perkos-pink": {
+    border: "border-perkos-pink/30",
+    borderHover: "hover:border-perkos-pink/60",
+    bgFrom: "from-perkos-pink/[0.08]",
+    line: "via-perkos-pink/50",
+    glow: "bg-perkos-pink/30",
+    text: "text-perkos-pink",
+    badgeBg: "bg-perkos-pink/10",
+    badgeBorder: "border-perkos-pink/20",
+    btnBg: "bg-perkos-gradient hover:opacity-90",
+    btnBorder: "border-perkos-pink/50",
+    btnHoverBg: "hover:bg-perkos-pink hover:text-white",
+  },
+  "perkos-cyan": {
+    border: "border-perkos-cyan/30",
+    borderHover: "hover:border-perkos-cyan/60",
+    bgFrom: "from-perkos-cyan/[0.08]",
+    line: "via-perkos-cyan/50",
+    glow: "bg-perkos-cyan/30",
+    text: "text-perkos-cyan",
+    badgeBg: "bg-perkos-cyan/10",
+    badgeBorder: "border-perkos-cyan/20",
+    btnBg: "bg-perkos-gradient-aura hover:opacity-90",
+    btnBorder: "border-perkos-cyan/50",
+    btnHoverBg: "hover:bg-perkos-cyan hover:text-white",
+  },
+  "perkos-amber": {
+    border: "border-perkos-amber/30",
+    borderHover: "hover:border-perkos-amber/60",
+    bgFrom: "from-perkos-amber/[0.08]",
+    line: "via-perkos-amber/50",
+    glow: "bg-perkos-amber/30",
+    text: "text-perkos-amber",
+    badgeBg: "bg-perkos-amber/10",
+    badgeBorder: "border-perkos-amber/20",
+    btnBg: "bg-perkos-amber hover:opacity-90 text-black",
+    btnBorder: "border-perkos-amber/50",
+    btnHoverBg: "hover:bg-perkos-amber hover:text-black",
+  },
+};
+
+const GitHubIcon = () => (
+  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+  </svg>
+);
+
 export default async function Home() {
   const contributors = await getContributors();
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Header */}
       <Header />
 
       {/* Hero Section */}
-      <section className="py-12 sm:py-20 md:py-32 bg-gradient-to-b from-background to-muted">
+      <section className="py-16 sm:py-24 md:py-32 bg-gradient-to-b from-background to-muted">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center text-center gap-6 sm:gap-8 max-w-4xl mx-auto">
-            <div className="flex items-center gap-4">
-              <Image
-                src="/images/PerkOS.png"
-                alt="PerkOS Logo"
-                width={300}
-                height={100}
-                className="w-60 h-20 sm:w-28 sm:h-28 md:w-96 md:h-32 rounded-2xl"
-              />
-            </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight px-4">
-              The Operating System for AI Agents
+              Run your organization on AI agents
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-3xl px-4">
-              Build, deploy, and monetize AI agents across multiple platforms.
-              Web3-native infrastructure for the agentic economy with instant micropayments.
+              Deploy, manage, and scale AI agents across your organization &mdash; with built-in
+              micropayments, on-chain identity, and fleet orchestration. The infrastructure for
+              the agentic economy.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto px-4">
               <Button size="lg" className="w-full sm:w-auto min-w-[200px] bg-perkos-gradient hover:opacity-90 glow-pink" asChild>
-                <Link href="https://spark.perkos.xyz">Launch Your Agent</Link>
+                <Link href="https://stack.perkos.xyz">Get Started</Link>
               </Button>
               <Button size="lg" variant="outline" className="w-full sm:w-auto min-w-[200px] border-perkos-pink text-perkos-pink hover:bg-perkos-pink hover:text-white" asChild>
-                <Link href="https://github.com/PerkOS-xyz/PerkOS">Developer Docs</Link>
+                <Link href="#how-it-works">See How It Works</Link>
               </Button>
             </div>
-            <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-8 text-xs sm:text-sm text-muted-foreground px-4">
+
+            {/* Value Props integrated into hero */}
+            <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-12 pt-4">
               <div className="flex items-center gap-2">
                 <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                <span>Live on Mainnet</span>
+                <span className="text-sm text-muted-foreground">Live on Mainnet</span>
               </div>
-              <span className="hidden sm:inline">•</span>
-              <span>x402 Protocol</span>
-              <span className="hidden sm:inline">•</span>
-              <span>ERC-8004 Identity</span>
-              <span className="hidden sm:inline">•</span>
-              <span>7 Networks</span>
+              <div className="text-center">
+                <div className="text-2xl sm:text-3xl font-bold text-perkos-orange">$0.0001</div>
+                <div className="text-xs text-muted-foreground">Min transaction</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl sm:text-3xl font-bold text-perkos-pink">&lt;2s</div>
+                <div className="text-xs text-muted-foreground">Settlement</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl sm:text-3xl font-bold text-perkos-coral">7+</div>
+                <div className="text-xs text-muted-foreground">Networks</div>
+              </div>
             </div>
           </div>
         </div>
@@ -80,11 +188,10 @@ export default async function Home() {
           </div>
           <div className="relative marquee-fade">
             <div className="flex animate-marquee">
-              {/* First set of chains */}
               {CHAIN_DATA.map((chain, idx) => (
                 <div
                   key={`first-${idx}`}
-                  className="flex items-center gap-3 px-8 py-4 mx-4 bg-gradient-to-r rounded-xl border border-white/5 hover:border-perkos-pink/30 transition-colors shrink-0"
+                  className="flex items-center gap-3 px-8 py-4 mx-4 rounded-xl border border-white/5 hover:border-perkos-pink/30 transition-colors shrink-0"
                   style={{ background: `linear-gradient(135deg, rgba(27, 24, 51, 0.8), rgba(14, 7, 22, 0.8))` }}
                 >
                   <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center p-1.5">
@@ -93,11 +200,10 @@ export default async function Home() {
                   <span className="font-medium text-white/90">{chain.name}</span>
                 </div>
               ))}
-              {/* Duplicate set for seamless loop */}
               {CHAIN_DATA.map((chain, idx) => (
                 <div
                   key={`second-${idx}`}
-                  className="flex items-center gap-3 px-8 py-4 mx-4 bg-gradient-to-r rounded-xl border border-white/5 hover:border-perkos-pink/30 transition-colors shrink-0"
+                  className="flex items-center gap-3 px-8 py-4 mx-4 rounded-xl border border-white/5 hover:border-perkos-pink/30 transition-colors shrink-0"
                   style={{ background: `linear-gradient(135deg, rgba(27, 24, 51, 0.8), rgba(14, 7, 22, 0.8))` }}
                 >
                   <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center p-1.5">
@@ -111,448 +217,99 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Contributors Carousel */}
-      <ContributorsCarousel contributors={contributors} />
-
-      {/* Value Props Section */}
-      <section className="py-12 sm:py-16 border-t bg-muted/50">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-5xl mx-auto text-center">
-            <div className="space-y-2">
-              <div className="text-3xl sm:text-4xl font-bold text-perkos-orange">$0.0001</div>
-              <div className="text-sm text-muted-foreground">Minimum transaction size</div>
-            </div>
-            <div className="space-y-2">
-              <div className="text-3xl sm:text-4xl font-bold text-perkos-pink">&lt;2s</div>
-              <div className="text-sm text-muted-foreground">Settlement time</div>
-            </div>
-            <div className="space-y-2">
-              <div className="text-3xl sm:text-4xl font-bold text-perkos-coral">7+</div>
-              <div className="text-sm text-muted-foreground">Production networks</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Product Ecosystem Showcase */}
-      <section className="py-16 sm:py-20 md:py-28 border-t relative overflow-hidden">
-        {/* Ambient background effects */}
+      {/* Product Ecosystem — Compact Grid */}
+      <section className="py-16 sm:py-20 border-t relative overflow-hidden" id="products">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-perkos-purple/8 rounded-full blur-3xl" />
-          <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-perkos-pink/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/4 right-1/3 w-96 h-96 bg-perkos-cyan/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/6 left-1/3 w-96 h-96 bg-perkos-amber/5 rounded-full blur-3xl" />
+          <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-perkos-purple/8 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-perkos-pink/5 rounded-full blur-3xl" />
         </div>
 
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
-          {/* Section Header */}
-          <div className="text-center mb-16 sm:mb-20">
+          <div className="text-center mb-12 sm:mb-16">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 mb-6">
               <span className="w-2 h-2 rounded-full bg-perkos-purple animate-pulse" />
               <span className="text-xs font-medium tracking-wider uppercase text-white/70">The PerkOS Ecosystem</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 px-4 tracking-tight">
-              <span className="text-perkos-purple">Stack</span> powers. <span className="text-perkos-orange">Spark</span> ignites. <span className="text-perkos-cyan">Aura</span> serves. <span className="text-perkos-amber">Swarm</span> orchestrates.
+              Four products. One infrastructure.
             </h2>
             <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto px-4">
-              One infrastructure. Endless possibilities. Built for the agentic economy.
+              Everything your organization needs to deploy, operate, and scale AI agents.
             </p>
           </div>
 
-          {/* Products Grid - Stack First Layout */}
-          <div className="max-w-6xl mx-auto">
-            {/* Hero Row - Stack (Main Infrastructure Product) */}
-            <Card className="relative overflow-hidden border-2 border-perkos-purple/30 bg-gradient-to-br from-perkos-purple/[0.08] via-white/[0.02] to-transparent backdrop-blur-sm transition-all duration-500 product-card-stack group mb-6 sm:mb-8" id="stack">
-              {/* Enhanced decorative elements for hero status */}
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-perkos-purple/50 to-transparent" />
-              <div className="absolute top-0 left-1/4 w-48 h-48 bg-gradient-to-br from-perkos-purple/20 to-transparent rounded-full blur-2xl" />
-              <div className="absolute top-0 right-1/4 w-48 h-48 bg-gradient-to-bl from-perkos-magenta/15 to-transparent rounded-full blur-2xl" />
-              <div className="absolute bottom-0 left-0 w-40 h-40 bg-gradient-to-tr from-perkos-purple/10 to-transparent rounded-tr-full" />
-              <div className="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-tl from-perkos-magenta/10 to-transparent rounded-tl-full" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+            {products.map((product) => {
+              const colors = productColorMap[product.colorClass];
+              return (
+                <Card
+                  key={product.name}
+                  className={`relative overflow-hidden ${colors.border} ${colors.borderHover} bg-gradient-to-br ${colors.bgFrom} via-white/[0.02] to-transparent backdrop-blur-sm transition-all duration-500 group`}
+                  style={{ boxShadow: undefined }}
+                >
+                  <div className={`absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent ${colors.line} to-transparent`} />
 
-              <CardHeader className="pb-4">
-                <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-2">
-                  <div className="flex items-center gap-5">
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-perkos-purple/40 rounded-2xl blur-2xl group-hover:blur-3xl transition-all scale-150" />
-                      <Image
-                        src="/images/Stack-icon.png"
-                        alt="Stack"
-                        width={72}
-                        height={72}
-                        className="rounded-2xl relative z-10"
-                      />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-3 mb-1">
-                        <CardTitle className="text-3xl sm:text-4xl font-bold tracking-tight">Stack</CardTitle>
-                        <span className="product-badge bg-perkos-purple/20 text-perkos-purple border border-perkos-purple/30">Core Infrastructure</span>
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-3">
+                        <div className="relative">
+                          <div className={`absolute inset-0 ${colors.glow} rounded-xl blur-xl group-hover:blur-2xl transition-all`} />
+                          <Image src={product.icon} alt={product.name} width={48} height={48} className="rounded-xl relative z-10" />
+                        </div>
+                        <div>
+                          <CardTitle className="text-xl font-bold tracking-tight">{product.name}</CardTitle>
+                          <span className={`text-xs font-semibold uppercase tracking-wider ${colors.text}`}>{product.badge}</span>
+                        </div>
                       </div>
-                      <CardDescription className="text-base text-perkos-purple font-medium">The x402 facilitator powering the agentic economy</CardDescription>
+                      {product.status === "live" ? (
+                        <span className="text-[10px] uppercase tracking-wider font-semibold px-2 py-1 rounded-full bg-green-500/10 text-green-400 border border-green-500/20">Live</span>
+                      ) : (
+                        <span className={`text-[10px] uppercase tracking-wider font-semibold px-2 py-1 rounded-full ${colors.badgeBg} ${colors.text} ${colors.badgeBorder} border animate-pulse`}>Building</span>
+                      )}
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="product-badge bg-white/5 text-white/70 border border-white/10">10 npm packages</span>
-                    <span className="product-badge bg-white/5 text-white/70 border border-white/10">7 networks</span>
-                    <span className="product-badge bg-white/5 text-white/70 border border-white/10">Production-ready</span>
-                  </div>
-                </div>
-              </CardHeader>
+                  </CardHeader>
 
-              <CardContent className="space-y-6">
-                <p className="text-muted-foreground leading-relaxed max-w-4xl">
-                  Complete infrastructure for agent-powered applications. Stack provides the x402 facilitator, payment verification,
-                  settlement services, and agent registry that powers Spark, Aura, and your applications. Multi-chain by default.
-                </p>
+                  <CardContent className="space-y-4">
+                    <CardDescription className="text-sm text-white/60 leading-relaxed">
+                      {product.description}
+                    </CardDescription>
 
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 py-2">
-                  <div className="flex items-start gap-3 p-3 rounded-lg bg-white/[0.02] border border-white/5">
-                    <span className="text-perkos-purple text-xl">🔌</span>
-                    <div>
-                      <div className="font-medium text-sm text-white/90">REST API</div>
-                      <div className="text-xs text-white/50">Agent management</div>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-3 rounded-lg bg-white/[0.02] border border-white/5">
-                    <span className="text-perkos-purple text-xl">💳</span>
-                    <div>
-                      <div className="font-medium text-sm text-white/90">x402 Facilitator</div>
-                      <div className="text-xs text-white/50">Instant micropayments</div>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-3 rounded-lg bg-white/[0.02] border border-white/5">
-                    <span className="text-perkos-purple text-xl">🔍</span>
-                    <div>
-                      <div className="font-medium text-sm text-white/90">Discovery</div>
-                      <div className="text-xs text-white/50">Agent registry</div>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-3 rounded-lg bg-white/[0.02] border border-white/5">
-                    <span className="text-perkos-purple text-xl">🆔</span>
-                    <div>
-                      <div className="font-medium text-sm text-white/90">ERC-8004</div>
-                      <div className="text-xs text-white/50">On-chain identity</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 py-2 px-3 rounded-lg bg-white/[0.03] border border-white/5">
-                  <span className="text-xs text-white/50">Accepted:</span>
-                  <span className="text-xs font-semibold text-white/80">USDC</span>
-                  <span className="text-white/20">|</span>
-                  <span className="text-xs font-semibold text-perkos-amber">$PerkOS*</span>
-                  <span className="text-white/20">|</span>
-                  <span className="text-xs font-semibold text-perkos-pink">$SelfClaw*</span>
-                </div>
-
-                <div className="pt-2 flex flex-col sm:flex-row gap-3">
-                  <Button className="flex-1 bg-perkos-purple hover:bg-perkos-magenta font-semibold h-11" asChild>
-                    <Link href="https://stack.perkos.xyz">Launch Stack App</Link>
-                  </Button>
-                  <Button variant="outline" className="flex-1 border-perkos-purple/50 text-perkos-purple hover:bg-perkos-purple hover:text-white h-11" asChild>
-                    <Link href="https://github.com/PerkOS-xyz/Stack">View on GitHub</Link>
-                  </Button>
-                  <Button variant="outline" className="flex-1 border-white/20 text-white/70 hover:bg-white/10 hover:text-white h-11" asChild>
-                    <Link href="https://www.npmjs.com/org/perkos">npm Packages</Link>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Connection indicator */}
-            <div className="hidden lg:flex justify-center items-center py-4 relative">
-              <div className="flex items-center gap-4">
-                <div className="h-px w-32 bg-gradient-to-r from-transparent via-perkos-purple/40 to-perkos-pink/30" />
-                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-perkos-purple/10 border border-perkos-purple/20">
-                  <svg className="w-4 h-4 text-perkos-purple" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
-                  <span className="text-xs font-medium text-perkos-purple/80">Powers</span>
-                </div>
-                <div className="h-px w-32 bg-gradient-to-r from-perkos-cyan/30 via-perkos-purple/40 to-transparent" />
-              </div>
-            </div>
-
-            {/* Bottom Row - Spark and Aura (Built on Stack) */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
-              {/* Spark Card */}
-              <Card className="relative overflow-hidden border border-white/10 bg-gradient-to-br from-white/[0.03] to-transparent backdrop-blur-sm transition-all duration-500 product-card-spark group" id="spark">
-                <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-perkos-pink/20 via-perkos-coral/10 to-transparent rounded-bl-[100px] transition-all duration-500 group-hover:w-48 group-hover:h-48" />
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-perkos-orange/10 to-transparent rounded-tr-full" />
-
-                <CardHeader className="pb-2">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-4">
-                      <div className="relative">
-                        <div className="absolute inset-0 bg-perkos-pink/30 rounded-xl blur-xl group-hover:blur-2xl transition-all" />
-                        <Image
-                          src="/images/Spark-icon.png"
-                          alt="Spark"
-                          width={56}
-                          height={56}
-                          className="rounded-xl relative z-10"
+                    <div className="flex gap-2 pt-1">
+                      {product.status === "live" ? (
+                        <>
+                          <Button className={`flex-1 ${colors.btnBg} font-semibold h-9 text-sm`} asChild>
+                            <Link href={product.url}>Open {product.name}</Link>
+                          </Button>
+                          <Button variant="outline" size="icon" className={`h-9 w-9 ${colors.btnBorder} ${colors.text} ${colors.btnHoverBg}`} asChild>
+                            <Link href={product.github}><GitHubIcon /></Link>
+                          </Button>
+                        </>
+                      ) : (
+                        <WaitlistForm
+                          product={product.name.toLowerCase() as "spark" | "swarm"}
+                          placeholder={`Get notified when ${product.name} launches`}
+                          buttonText="Notify Me"
+                          className="w-full"
                         />
-                      </div>
-                      <div>
-                        <CardTitle className="text-2xl font-bold tracking-tight">Spark</CardTitle>
-                        <CardDescription className="text-sm text-perkos-orange font-medium">No-code AI agent launcher</CardDescription>
-                      </div>
+                      )}
                     </div>
-                    <div className="flex flex-col items-end gap-2">
-                      <span className="product-badge bg-perkos-pink/20 text-perkos-pink border border-perkos-pink/30">For Creators</span>
-                      <span className="product-badge bg-perkos-orange/20 text-perkos-orange border border-perkos-orange/30 animate-pulse">Building</span>
-                    </div>
-                  </div>
-                </CardHeader>
-
-                <CardContent className="space-y-5">
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    Launch intelligent AI agents with personality in minutes. No coding required.
-                    Perfect for community managers, creators, and Web3 projects.
-                  </p>
-
-                  <ul className="space-y-2.5">
-                    <li className="flex items-start gap-3 text-sm">
-                      <span className="text-perkos-orange text-base">⚡</span>
-                      <span className="text-white/80">5-minute setup, deploy across platforms instantly</span>
-                    </li>
-                    <li className="flex items-start gap-3 text-sm">
-                      <span className="text-perkos-orange text-base">🎨</span>
-                      <span className="text-white/80">Visual character & personality editor</span>
-                    </li>
-                    <li className="flex items-start gap-3 text-sm">
-                      <span className="text-perkos-orange text-base">🔌</span>
-                      <span className="text-white/80">Discord, Telegram, Twitch, Kick support</span>
-                    </li>
-                    <li className="flex items-start gap-3 text-sm">
-                      <span className="text-perkos-orange text-base">💰</span>
-                      <span className="text-white/80">Built-in x402 micropayments</span>
-                    </li>
-                  </ul>
-
-                  <div className="flex items-center gap-2 py-2 px-3 rounded-lg bg-white/[0.03] border border-white/5">
-                    <span className="text-xs text-white/50">Accepted:</span>
-                    <span className="text-xs font-semibold text-white/80">USDC</span>
-                    <span className="text-white/20">|</span>
-                    <span className="text-xs font-semibold text-perkos-amber">$PerkOS*</span>
-                    <span className="text-white/20">|</span>
-                    <span className="text-xs font-semibold text-perkos-pink">$SelfClaw*</span>
-                  </div>
-
-                  <div className="pt-3 flex gap-3">
-                    <Button className="flex-1 bg-perkos-gradient/50 font-semibold cursor-not-allowed" disabled>
-                      Launch Spark
-                    </Button>
-                    <Button variant="outline" size="icon" className="border-perkos-pink/50 text-perkos-pink hover:bg-perkos-pink hover:text-white" asChild>
-                      <Link href="https://github.com/PerkOS-xyz/Spark">
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                      </Link>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Aura Card */}
-              <Card className="relative overflow-hidden border border-white/10 bg-gradient-to-br from-white/[0.03] to-transparent backdrop-blur-sm transition-all duration-500 product-card-aura group" id="aura">
-                <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-perkos-cyan/20 via-perkos-teal/10 to-transparent rounded-bl-[100px] transition-all duration-500 group-hover:w-48 group-hover:h-48" />
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-perkos-cyan/10 to-transparent rounded-tr-full" />
-
-                <CardHeader className="pb-2">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-4">
-                      <div className="relative">
-                        <div className="absolute inset-0 bg-perkos-cyan/30 rounded-xl blur-xl group-hover:blur-2xl transition-all" />
-                        <Image
-                          src="/images/Aura-icon.png"
-                          alt="Aura"
-                          width={56}
-                          height={56}
-                          className="rounded-xl relative z-10"
-                        />
-                      </div>
-                      <div>
-                        <CardTitle className="text-2xl font-bold tracking-tight">Aura</CardTitle>
-                        <CardDescription className="text-sm text-perkos-cyan font-medium">AI Vendor Service with x402</CardDescription>
-                      </div>
-                    </div>
-                    <span className="product-badge bg-perkos-cyan/20 text-perkos-cyan border border-perkos-cyan/30">20 APIs</span>
-                  </div>
-                </CardHeader>
-
-                <CardContent className="space-y-5">
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    20 AI endpoints for vision, NLP, business tools, and developer utilities.
-                    Powered by GPT-4o, DALL-E 3, and Whisper with instant micropayments.
-                  </p>
-
-                  <ul className="space-y-2.5">
-                    <li className="flex items-start gap-3 text-sm">
-                      <span className="text-perkos-cyan text-base">🖼️</span>
-                      <span className="text-white/80">Vision: Image analysis, generation, OCR</span>
-                    </li>
-                    <li className="flex items-start gap-3 text-sm">
-                      <span className="text-perkos-cyan text-base">🌐</span>
-                      <span className="text-white/80">NLP: Translation, summarization, sentiment</span>
-                    </li>
-                    <li className="flex items-start gap-3 text-sm">
-                      <span className="text-perkos-cyan text-base">💻</span>
-                      <span className="text-white/80">Developer: Code generation, review, SQL</span>
-                    </li>
-                    <li className="flex items-start gap-3 text-sm">
-                      <span className="text-perkos-cyan text-base">💳</span>
-                      <span className="text-white/80">x402 v2 micropayments — pay per API call</span>
-                    </li>
-                  </ul>
-
-                  <div className="pt-3 flex gap-3">
-                    <Button className="flex-1 bg-perkos-gradient-aura hover:opacity-90 font-semibold text-white" asChild>
-                      <Link href="https://aura.perkos.xyz">Try Aura API</Link>
-                    </Button>
-                    <Button variant="outline" size="icon" className="border-perkos-cyan/50 text-perkos-cyan hover:bg-perkos-cyan hover:text-white" asChild>
-                      <Link href="https://github.com/PerkOS-xyz/PerkOS-Aura">
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                      </Link>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Connection indicator - Swarm */}
-            <div className="hidden lg:flex justify-center items-center py-4 relative">
-              <div className="flex items-center gap-4">
-                <div className="h-px w-32 bg-gradient-to-r from-transparent via-perkos-pink/30 to-perkos-amber/30" />
-                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-perkos-amber/10 border border-perkos-amber/20">
-                  <svg className="w-4 h-4 text-perkos-amber" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
-                  <span className="text-xs font-medium text-perkos-amber/80">Orchestrates</span>
-                </div>
-                <div className="h-px w-32 bg-gradient-to-r from-perkos-amber/30 via-perkos-cyan/30 to-transparent" />
-              </div>
-            </div>
-
-            {/* Swarm Card - Full Width (Fleet Orchestration) */}
-            <Card className="relative overflow-hidden border-2 border-perkos-amber/30 bg-gradient-to-br from-perkos-amber/[0.08] via-white/[0.02] to-transparent backdrop-blur-sm transition-all duration-500 product-card-swarm group" id="swarm">
-              {/* Decorative elements */}
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-perkos-amber/50 to-transparent" />
-              <div className="absolute top-0 left-1/4 w-48 h-48 bg-gradient-to-br from-perkos-amber/20 to-transparent rounded-full blur-2xl" />
-              <div className="absolute top-0 right-1/4 w-48 h-48 bg-gradient-to-bl from-perkos-yellow/15 to-transparent rounded-full blur-2xl" />
-              <div className="absolute bottom-0 left-0 w-40 h-40 bg-gradient-to-tr from-perkos-amber/10 to-transparent rounded-tr-full" />
-              <div className="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-tl from-perkos-yellow/10 to-transparent rounded-tl-full" />
-
-              <CardHeader className="pb-4">
-                <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-2">
-                  <div className="flex items-center gap-5">
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-perkos-amber/40 rounded-2xl blur-2xl group-hover:blur-3xl transition-all scale-150" />
-                      <Image
-                        src="/images/Swarm-icon.png"
-                        alt="Swarm"
-                        width={72}
-                        height={72}
-                        className="rounded-2xl relative z-10"
-                      />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-3 mb-1">
-                        <CardTitle className="text-3xl sm:text-4xl font-bold tracking-tight">Swarm</CardTitle>
-                        <span className="product-badge bg-perkos-amber/20 text-perkos-amber border border-perkos-amber/30">Fleet Orchestration</span>
-                      </div>
-                      <CardDescription className="text-base text-perkos-amber font-medium">Enterprise AI fleet orchestration for autonomous business operations</CardDescription>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="product-badge bg-perkos-amber/20 text-perkos-amber border border-perkos-amber/30 animate-pulse">Building</span>
-                    <span className="product-badge bg-white/5 text-white/70 border border-white/10">6 Agent Types</span>
-                    <span className="product-badge bg-white/5 text-white/70 border border-white/10">2 Chains</span>
-                    <span className="product-badge bg-white/5 text-white/70 border border-white/10">Real-time WSS</span>
-                  </div>
-                </div>
-              </CardHeader>
-
-              <CardContent className="space-y-6">
-                <p className="text-muted-foreground leading-relaxed max-w-4xl">
-                  Complete command center for deploying and managing AI agent fleets. Swarm provides real-time communication,
-                  task orchestration, project management, and agent onboarding that powers your autonomous business operations. Multi-chain by default.
-                </p>
-
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 py-2">
-                  <div className="flex items-start gap-3 p-3 rounded-lg bg-white/[0.02] border border-white/5">
-                    <span className="text-perkos-amber text-xl">📡</span>
-                    <div>
-                      <div className="font-medium text-sm text-white/90">WSS Hub</div>
-                      <div className="text-xs text-white/50">Secure real-time messaging</div>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-3 rounded-lg bg-white/[0.02] border border-white/5">
-                    <span className="text-perkos-amber text-xl">🐝</span>
-                    <div>
-                      <div className="font-medium text-sm text-white/90">Fleet Manager</div>
-                      <div className="text-xs text-white/50">Agent orchestration</div>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-3 rounded-lg bg-white/[0.02] border border-white/5">
-                    <span className="text-perkos-amber text-xl">📋</span>
-                    <div>
-                      <div className="font-medium text-sm text-white/90">Task Board</div>
-                      <div className="text-xs text-white/50">Kanban + on-chain jobs</div>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-3 rounded-lg bg-white/[0.02] border border-white/5">
-                    <span className="text-perkos-amber text-xl">🔌</span>
-                    <div>
-                      <div className="font-medium text-sm text-white/90">Swarm Connect</div>
-                      <div className="text-xs text-white/50">Self-installing agent plugin</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 py-2 px-3 rounded-lg bg-white/[0.03] border border-white/5">
-                  <span className="text-xs text-white/50">Accepted:</span>
-                  <span className="text-xs font-semibold text-white/80">USDC</span>
-                  <span className="text-white/20">|</span>
-                  <span className="text-xs font-semibold text-perkos-amber">$PerkOS*</span>
-                  <span className="text-white/20">|</span>
-                  <span className="text-xs font-semibold text-perkos-pink">$SelfClaw*</span>
-                </div>
-
-                <div className="pt-2 flex flex-col sm:flex-row gap-3">
-                  <Button className="flex-1 bg-perkos-amber hover:bg-perkos-yellow text-black font-semibold h-11" asChild>
-                    <Link href="https://swarm.perkos.xyz">Launch Swarm App</Link>
-                  </Button>
-                  <Button variant="outline" className="flex-1 border-perkos-amber/50 text-perkos-amber hover:bg-perkos-amber hover:text-black h-11" asChild>
-                    <Link href="https://github.com/PerkOS-xyz/Swarm">View on GitHub</Link>
-                  </Button>
-                  <Button variant="outline" className="flex-1 border-white/20 text-white/70 hover:bg-white/10 hover:text-white h-11" asChild>
-                    <Link href="https://github.com/PerkOS-xyz/Swarm#readme">Documentation</Link>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Token Info Footnote */}
-            <div className="mt-6 pt-4 border-t border-white/10">
-              <p className="text-sm text-muted-foreground mb-3">
-                * <span className="text-perkos-amber font-medium">$PerkOS</span> and <span className="text-perkos-pink font-medium">$SelfClaw</span> available on Base and Celo.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-x-8 gap-y-1.5 text-xs font-mono text-white/40">
-                <Link href="https://app.uniswap.org/explore/tokens/base/0xf714e60f85497d70508f7e356b5db80e64539ba3" target="_blank" rel="noopener noreferrer" className="hover:text-perkos-amber transition-colors">$PerkOS Base: 0xF714E60f...39BA3</Link>
-                <Link href="https://app.uniswap.org/explore/tokens/celo/0xb7ba43fbd4f2e85fce929f7d4dfe3905ae846a46" target="_blank" rel="noopener noreferrer" className="hover:text-perkos-amber transition-colors">$PerkOS Celo: 0xb7Ba43fB...846A46</Link>
-                <Link href="https://app.uniswap.org/explore/tokens/base/0x9ae5f51d81ff510bf961218f833f79d57bfbab07" target="_blank" rel="noopener noreferrer" className="hover:text-perkos-pink transition-colors">$SelfClaw Base: 0x9ae5f51d...bab07</Link>
-                <Link href="https://app.uniswap.org/explore/tokens/celo/0xcd88f99adf75a9110c0bcd22695a32a20ec54ecb" target="_blank" rel="noopener noreferrer" className="hover:text-perkos-pink transition-colors">$SelfClaw Celo: 0xCD88f99A...4ECb</Link>
-              </div>
-            </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* How It Works Section */}
-      <section className="py-12 sm:py-16 md:py-20 border-t bg-muted/50">
+      {/* How Payments Work */}
+      <section className="py-12 sm:py-16 md:py-20 border-t bg-muted/50" id="how-it-works">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 sm:mb-16">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 px-4">
-              The x402 Protocol
+              How Payments Work
             </h2>
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
-              HTTP 402 &quot;Payment Required&quot; has existed since 1999 — reserved for future use.
-              PerkOS activates it.
+              HTTP 402 &quot;Payment Required&quot; has existed since 1999. PerkOS activates it.
             </p>
           </div>
 
@@ -562,141 +319,98 @@ export default async function Home() {
                 <div className="w-12 h-12 rounded-full bg-perkos-orange/10 flex items-center justify-center mx-auto">
                   <span className="text-2xl text-perkos-orange">1</span>
                 </div>
-                <h3 className="font-semibold">Request</h3>
-                <p className="text-sm text-muted-foreground">Client requests a paid resource</p>
+                <h3 className="font-semibold">Agent Provides Service</h3>
+                <p className="text-sm text-muted-foreground">Your agent handles a task or request</p>
               </div>
               <div className="text-center space-y-3 p-4">
                 <div className="w-12 h-12 rounded-full bg-perkos-coral/10 flex items-center justify-center mx-auto">
                   <span className="text-2xl text-perkos-coral">2</span>
                 </div>
-                <h3 className="font-semibold">402 Response</h3>
-                <p className="text-sm text-muted-foreground">Server returns payment requirements</p>
+                <h3 className="font-semibold">Price Quoted Instantly</h3>
+                <p className="text-sm text-muted-foreground">Server returns the cost automatically</p>
               </div>
               <div className="text-center space-y-3 p-4">
                 <div className="w-12 h-12 rounded-full bg-perkos-pink/10 flex items-center justify-center mx-auto">
                   <span className="text-2xl text-perkos-pink">3</span>
                 </div>
-                <h3 className="font-semibold">Sign & Pay</h3>
-                <p className="text-sm text-muted-foreground">Client signs payment with wallet</p>
+                <h3 className="font-semibold">One Signature to Pay</h3>
+                <p className="text-sm text-muted-foreground">Wallet-based payment, no invoices</p>
               </div>
               <div className="text-center space-y-3 p-4">
                 <div className="w-12 h-12 rounded-full bg-perkos-purple/10 flex items-center justify-center mx-auto">
                   <span className="text-2xl text-perkos-purple">4</span>
                 </div>
-                <h3 className="font-semibold">Access</h3>
-                <p className="text-sm text-muted-foreground">Resource delivered, instant settlement</p>
+                <h3 className="font-semibold">Settled in Seconds</h3>
+                <p className="text-sm text-muted-foreground">Instant settlement, zero chargebacks</p>
               </div>
             </div>
 
             <div className="mt-8 p-6 bg-background rounded-lg border text-center">
               <p className="text-muted-foreground">
-                Built on the x402 standard championed by <strong>Coinbase</strong> and the{" "}
-                <strong>x402 Foundation</strong>. Production-ready infrastructure for the programmable web.
+                Built on the{" "}
+                <Link href="https://www.x402.org/" className="text-perkos-pink hover:underline font-medium" target="_blank" rel="noopener noreferrer">x402 standard</Link>
+                {" "}championed by <strong>Coinbase</strong> and the <strong>x402 Foundation</strong>.
+                Production-ready infrastructure for the programmable web.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features Grid */}
+      {/* Features — 3 Outcome-Focused Cards */}
       <section className="py-12 sm:py-16 md:py-20 bg-muted" id="features">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 sm:mb-16">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 px-4">
-              Everything you need to build agents
+              Built for the agentic economy
             </h2>
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
-              Web3-native infrastructure purpose-built for the agentic economy
+              Everything organizations need to operate with AI agents at scale
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
-            <Card>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-5xl mx-auto">
+            <Card className="card-hover">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <span className="text-2xl">⚡</span>
-                  x402 Payments
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <span className="text-2xl">&#x26A1;</span>
+                  Agents that pay for themselves
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">
-                  Native HTTP 402 protocol support. Sub-cent transactions, instant settlement,
-                  zero chargebacks. Pay only for what you use.
+                <p className="text-muted-foreground text-sm">
+                  Your agents handle transactions autonomously with sub-cent precision.
+                  Instant settlement on L2, near-zero fees, real-time analytics on every interaction.
                 </p>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="card-hover">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <span className="text-2xl">🆔</span>
-                  ERC-8004 Identity
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <span className="text-2xl">&#x1F310;</span>
+                  Deploy across chains and platforms
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">
-                  On-chain agent identity and reputation. Interoperable across the ecosystem
-                  with CAIP-2 chain-agnostic identifiers.
+                <p className="text-muted-foreground text-sm">
+                  One deployment reaches 7+ blockchain networks and every major platform &mdash;
+                  Discord, Telegram, Twitch, Kick, X, and Farcaster.
                 </p>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="card-hover">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <span className="text-2xl">🔍</span>
-                  Discovery Service
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <span className="text-2xl">&#x1F6E1;&#xFE0F;</span>
+                  Agents your organization can trust
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">
-                  Public agent registry with search and filtering. Let users find your agents.
-                  Build reputation over time.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <span className="text-2xl">🌐</span>
-                  Multi-Chain Native
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  Deploy once, earn from 7+ blockchain networks. Base, Optimism, Arbitrum,
-                  Polygon, Celo, Ethereum supported.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <span className="text-2xl">🔌</span>
-                  Multi-Platform
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  Deploy to Discord, Telegram, Twitch, and Kick from a single interface.
-                  Your AI never sleeps.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <span className="text-2xl">📊</span>
-                  Real-Time Analytics
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  Track engagement, usage metrics, and revenue with comprehensive dashboards
-                  and WebSocket logs.
+                <p className="text-muted-foreground text-sm">
+                  On-chain identity (ERC-8004) and reputation that builds over time. Verifiable agents
+                  with a public discovery registry across the ecosystem.
                 </p>
               </CardContent>
             </Card>
@@ -704,64 +418,124 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Who Is It For Section */}
+      {/* Social Proof */}
+      <section className="py-10 sm:py-12 border-t">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+              <div className="space-y-1">
+                <div className="text-sm font-semibold text-white/90">Built on x402</div>
+                <div className="text-xs text-muted-foreground">Championed by Coinbase</div>
+              </div>
+              <div className="space-y-1">
+                <div className="text-sm font-semibold text-white/90">Open Source</div>
+                <div className="text-xs text-muted-foreground">
+                  <Link href="https://github.com/PerkOS-xyz" className="hover:text-perkos-pink transition-colors" target="_blank" rel="noopener noreferrer">View on GitHub</Link>
+                </div>
+              </div>
+              <div className="space-y-1">
+                <div className="text-sm font-semibold text-white/90">7+ Networks</div>
+                <div className="text-xs text-muted-foreground">Multi-chain production</div>
+              </div>
+              <div className="space-y-1">
+                <div className="text-sm font-semibold text-white/90">{contributors.length || 10}+ Contributors</div>
+                <div className="text-xs text-muted-foreground">Building together</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Built For Your Organization */}
       <section className="py-12 sm:py-16 md:py-20 border-t">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 sm:mb-16">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 px-4">
-              Built for everyone in the ecosystem
+              Built for your organization
             </h2>
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
-              Whether you&apos;re a creator, developer, or enterprise — PerkOS has you covered
+              Whether you&apos;re scaling operations, selling AI services, or building infrastructure
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-5xl mx-auto">
-            <Card className="border-perkos-orange/30 card-hover">
-              <CardHeader>
-                <CardTitle className="text-xl">For Customers</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <p className="text-sm text-muted-foreground">
-                  Stop paying for subscriptions you don&apos;t use. Pay exactly what you consume.
-                </p>
-                <ul className="text-sm space-y-1 text-muted-foreground">
-                  <li>• Sub-cent transactions ($0.0001 minimum)</li>
-                  <li>• Wallet-based identity, one signature</li>
-                  <li>• Transparent pricing, on-chain audit trail</li>
-                </ul>
-              </CardContent>
-            </Card>
-
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto">
             <Card className="border-perkos-pink/30 card-hover">
               <CardHeader>
-                <CardTitle className="text-xl">For Vendors</CardTitle>
+                <CardTitle className="text-xl">Scale operations with AI agents</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="space-y-4">
                 <p className="text-sm text-muted-foreground">
-                  Turn any endpoint into a revenue stream. One line of code. Instant payments.
+                  Deploy agents that handle tasks, interact with users, and process payments
+                  autonomously across your organization.
                 </p>
                 <ul className="text-sm space-y-1 text-muted-foreground">
-                  <li>• Near-zero fees on L2 networks</li>
-                  <li>• Settlement in seconds, not weeks</li>
-                  <li>• Zero fraud risk, USDC settlement</li>
+                  <li>&bull; No-code agent setup in minutes</li>
+                  <li>&bull; Multi-platform deployment</li>
+                  <li>&bull; Built-in analytics and monitoring</li>
                 </ul>
+                <Button className="w-full bg-perkos-gradient hover:opacity-90" asChild>
+                  <Link href="https://spark.perkos.xyz">Try Spark</Link>
+                </Button>
               </CardContent>
             </Card>
 
             <Card className="border-perkos-purple/30 card-hover">
               <CardHeader>
-                <CardTitle className="text-xl">For Developers</CardTitle>
+                <CardTitle className="text-xl">Monetize your AI capabilities</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="space-y-4">
                 <p className="text-sm text-muted-foreground">
-                  Focus on building features, not payment infrastructure.
+                  Turn any API or model into a pay-per-use service with instant settlement.
+                  Near-zero fees on L2 networks.
                 </p>
                 <ul className="text-sm space-y-1 text-muted-foreground">
-                  <li>• 10 npm packages, full TypeScript</li>
-                  <li>• Ship in hours, not months</li>
-                  <li>• Standards compliant (x402, ERC-8004)</li>
+                  <li>&bull; One line of code to add payments</li>
+                  <li>&bull; Settlement in seconds, not weeks</li>
+                  <li>&bull; Zero fraud risk, USDC settlement</li>
                 </ul>
+                <Button className="w-full bg-perkos-purple hover:bg-perkos-magenta" asChild>
+                  <Link href="https://stack.perkos.xyz">Launch on Stack</Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="border-perkos-amber/30 card-hover">
+              <CardHeader>
+                <CardTitle className="text-xl">Orchestrate AI fleets at scale</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Coordinate hundreds of agents with real-time communication, task boards,
+                  and resource allocation across your organization.
+                </p>
+                <ul className="text-sm space-y-1 text-muted-foreground">
+                  <li>&bull; Fleet dashboard and monitoring</li>
+                  <li>&bull; Real-time agent communication hub</li>
+                  <li>&bull; Task boards and resource allocation</li>
+                </ul>
+                <Button className="w-full bg-perkos-amber hover:opacity-90 text-black" asChild>
+                  <Link href="https://swarm.perkos.xyz">Explore Swarm</Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="border-perkos-orange/30 card-hover">
+              <CardHeader>
+                <CardTitle className="text-xl">Build the agentic economy</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Open-source infrastructure with 10 npm packages, full TypeScript support.
+                  Ship agent-powered apps in hours, not months.
+                </p>
+                <ul className="text-sm space-y-1 text-muted-foreground">
+                  <li>&bull; Standards compliant (x402, ERC-8004)</li>
+                  <li>&bull; Full TypeScript SDK</li>
+                  <li>&bull; Extensive documentation</li>
+                </ul>
+                <Button variant="outline" className="w-full border-perkos-pink/50 text-perkos-pink hover:bg-perkos-pink hover:text-white" asChild>
+                  <Link href="https://github.com/PerkOS-xyz/PerkOS">View on GitHub</Link>
+                </Button>
               </CardContent>
             </Card>
           </div>
@@ -824,35 +598,35 @@ export default async function Home() {
                   <div className="flex justify-between items-center">
                     <div>
                       <div className="font-semibold">Free</div>
-                      <div className="text-xs text-muted-foreground">1,000 credits • 1 connector</div>
+                      <div className="text-xs text-muted-foreground">1,000 credits &bull; 1 connector</div>
                     </div>
                     <span className="font-mono font-bold">$0</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <div>
                       <div className="font-semibold">Starter</div>
-                      <div className="text-xs text-muted-foreground">15,000 credits • 2 connectors</div>
+                      <div className="text-xs text-muted-foreground">15,000 credits &bull; 2 connectors</div>
                     </div>
                     <span className="font-mono font-bold">$9</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <div>
                       <div className="font-semibold">Pro</div>
-                      <div className="text-xs text-muted-foreground">75,000 credits • all connectors</div>
+                      <div className="text-xs text-muted-foreground">75,000 credits &bull; all connectors</div>
                     </div>
                     <span className="font-mono font-bold">$29</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <div>
                       <div className="font-semibold">Scale</div>
-                      <div className="text-xs text-muted-foreground">300,000 credits • priority support</div>
+                      <div className="text-xs text-muted-foreground">300,000 credits &bull; priority support</div>
                     </div>
                     <span className="font-mono font-bold">$99</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <div>
                       <div className="font-semibold">Enterprise</div>
-                      <div className="text-xs text-muted-foreground">Unlimited • SLA • dedicated support</div>
+                      <div className="text-xs text-muted-foreground">Unlimited &bull; SLA &bull; dedicated support</div>
                     </div>
                     <span className="font-mono font-bold">Custom</span>
                   </div>
@@ -880,7 +654,7 @@ export default async function Home() {
                     </div>
                   </div>
                   <p className="text-xs text-muted-foreground pt-1">
-                    Pro & Scale include all connectors
+                    Pro &amp; Scale include all connectors
                   </p>
                 </div>
 
@@ -889,7 +663,7 @@ export default async function Home() {
                     Earn 5% back in <span className="font-semibold">$PerkOS</span> tokens on every package purchase
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    Pay with USDC, $PerkOS or $SelfClaw* • Buy extra credits anytime • ~75% gross margin
+                    Pay with USDC, $PerkOS or $SelfClaw* &bull; Buy extra credits anytime &bull; ~75% gross margin
                   </p>
                 </div>
               </CardContent>
@@ -938,42 +712,42 @@ export default async function Home() {
                   <div className="flex justify-between items-center">
                     <div>
                       <div className="font-semibold">Free</div>
-                      <div className="text-xs text-muted-foreground">1,000 calls • 1 network</div>
+                      <div className="text-xs text-muted-foreground">1,000 calls &bull; 1 network</div>
                     </div>
                     <span className="font-mono font-bold">$0</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <div>
                       <div className="font-semibold">Starter</div>
-                      <div className="text-xs text-muted-foreground">50,000 calls • 3 networks</div>
+                      <div className="text-xs text-muted-foreground">50,000 calls &bull; 3 networks</div>
                     </div>
                     <span className="font-mono font-bold">$5</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <div>
                       <div className="font-semibold">Pro</div>
-                      <div className="text-xs text-muted-foreground">500,000 calls • all networks</div>
+                      <div className="text-xs text-muted-foreground">500,000 calls &bull; all networks</div>
                     </div>
                     <span className="font-mono font-bold">$49</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <div>
                       <div className="font-semibold">Scale</div>
-                      <div className="text-xs text-muted-foreground">5M calls • priority routing</div>
+                      <div className="text-xs text-muted-foreground">5M calls &bull; priority routing</div>
                     </div>
                     <span className="font-mono font-bold">$299</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <div>
                       <div className="font-semibold">Enterprise</div>
-                      <div className="text-xs text-muted-foreground">Unlimited • SLA • dedicated infra</div>
+                      <div className="text-xs text-muted-foreground">Unlimited &bull; SLA &bull; dedicated infra</div>
                     </div>
                     <span className="font-mono font-bold">Custom</span>
                   </div>
                 </div>
 
                 <p className="text-xs text-muted-foreground pt-2 border-t border-white/10">
-                  Pay with USDC, $PerkOS or $SelfClaw* • L2 fees paid by users • ~80% margin
+                  Pay with USDC, $PerkOS or $SelfClaw* &bull; L2 fees paid by users &bull; ~80% margin
                 </p>
               </CardContent>
             </Card>
@@ -1017,39 +791,39 @@ export default async function Home() {
 
                 {/* Monthly Tiers */}
                 <div className="space-y-2">
-                  <p className="text-xs font-semibold text-perkos-yellow uppercase tracking-wide mb-2">Monthly Plans</p>
+                  <p className="text-xs font-semibold text-perkos-amber uppercase tracking-wide mb-2">Monthly Plans</p>
                   <div className="flex justify-between items-center">
                     <div>
                       <div className="font-semibold">Free</div>
-                      <div className="text-xs text-muted-foreground">3 agents • 1 project • 2 members</div>
+                      <div className="text-xs text-muted-foreground">3 agents &bull; 1 project &bull; 2 members</div>
                     </div>
                     <span className="font-mono font-bold">$0</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <div>
                       <div className="font-semibold">Starter</div>
-                      <div className="text-xs text-muted-foreground">10 agents • 3 projects • 5 members</div>
+                      <div className="text-xs text-muted-foreground">10 agents &bull; 3 projects &bull; 5 members</div>
                     </div>
                     <span className="font-mono font-bold">$19</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <div>
                       <div className="font-semibold">Pro</div>
-                      <div className="text-xs text-muted-foreground">50 agents • 10 projects • 15 members</div>
+                      <div className="text-xs text-muted-foreground">50 agents &bull; 10 projects &bull; 15 members</div>
                     </div>
                     <span className="font-mono font-bold">$49</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <div>
                       <div className="font-semibold">Scale</div>
-                      <div className="text-xs text-muted-foreground">200 agents • unlimited • 50 members</div>
+                      <div className="text-xs text-muted-foreground">200 agents &bull; unlimited &bull; 50 members</div>
                     </div>
                     <span className="font-mono font-bold">$199</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <div>
                       <div className="font-semibold">Enterprise</div>
-                      <div className="text-xs text-muted-foreground">Unlimited • SLA • dedicated hub</div>
+                      <div className="text-xs text-muted-foreground">Unlimited &bull; SLA &bull; dedicated hub</div>
                     </div>
                     <span className="font-mono font-bold">Custom</span>
                   </div>
@@ -1079,7 +853,7 @@ export default async function Home() {
                 </div>
 
                 <p className="text-xs text-muted-foreground pt-2 border-t border-white/10">
-                  Pay with USDC, $PerkOS or $SelfClaw* • Scale per agent • ~85% gross margin
+                  Pay with USDC, $PerkOS or $SelfClaw* &bull; Scale per agent &bull; ~85% gross margin
                 </p>
               </CardContent>
             </Card>
@@ -1119,7 +893,7 @@ export default async function Home() {
       </section>
 
       {/* Contact Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-muted" id="contact">
+      <section className="py-12 sm:py-16 md:py-20" id="contact">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 max-w-6xl mx-auto">
             <div className="space-y-6">
@@ -1128,15 +902,14 @@ export default async function Home() {
                   Let&apos;s Build Together
                 </h2>
                 <p className="text-base sm:text-lg text-muted-foreground">
-                  Have questions about PerkOS? Want to explore partnerships? Looking to integrate
-                  x402 payments? We&apos;d love to hear from you.
+                  Have questions about PerkOS? Want to explore partnerships? We&apos;d love to hear from you.
                 </p>
               </div>
 
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-lg bg-perkos-orange/10 flex items-center justify-center shrink-0">
-                    <span>📧</span>
+                    <span>&#x1F4E7;</span>
                   </div>
                   <div>
                     <h3 className="font-semibold">General Inquiries</h3>
@@ -1145,7 +918,7 @@ export default async function Home() {
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-lg bg-perkos-pink/10 flex items-center justify-center shrink-0">
-                    <span>🤝</span>
+                    <span>&#x1F91D;</span>
                   </div>
                   <div>
                     <h3 className="font-semibold">Partnerships</h3>
@@ -1154,7 +927,7 @@ export default async function Home() {
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-lg bg-perkos-purple/10 flex items-center justify-center shrink-0">
-                    <span>💼</span>
+                    <span>&#x1F4BC;</span>
                   </div>
                   <div>
                     <h3 className="font-semibold">Investors</h3>
@@ -1165,13 +938,13 @@ export default async function Home() {
 
               <div className="flex gap-4 pt-4">
                 <Button variant="outline" size="sm" asChild>
-                  <Link href="https://x.com/perk_os">X</Link>
+                  <Link href="https://x.com/perk_os" target="_blank" rel="noopener noreferrer">X</Link>
                 </Button>
                 <Button variant="outline" size="sm" asChild>
-                  <Link href="https://farcaster.xyz/perkos">Farcaster</Link>
+                  <Link href="https://farcaster.xyz/perkos" target="_blank" rel="noopener noreferrer">Farcaster</Link>
                 </Button>
                 <Button variant="outline" size="sm" asChild>
-                  <Link href="https://github.com/PerkOS-xyz">GitHub</Link>
+                  <Link href="https://github.com/PerkOS-xyz" target="_blank" rel="noopener noreferrer">GitHub</Link>
                 </Button>
               </div>
             </div>
@@ -1183,32 +956,32 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Contributors */}
+      <ContributorsCarousel contributors={contributors} />
+
       {/* CTA Section */}
       <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-t from-muted to-background" id="get-started">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center space-y-6 sm:space-y-8">
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold px-4">
-              Ready to build the future?
+              Ready to join the agentic economy?
             </h2>
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground px-4">
-              Join the agentic economy. Launch agents, build infrastructure, and monetize AI
-              with instant micropayments.
+              Deploy AI agents that work, earn, and scale &mdash; all with infrastructure built for organizations.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
-              <Button size="lg" className="w-full sm:w-auto bg-perkos-gradient hover:opacity-90 glow-pink min-w-[180px]" asChild>
-                <Link href="https://spark.perkos.xyz">
-                  Launch with Spark
-                </Link>
-              </Button>
+            <div className="max-w-md mx-auto px-4">
+              <WaitlistForm
+                product="general"
+                placeholder="your@organization.com"
+                buttonText="Get Early Access"
+              />
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 pt-2">
               <Button size="lg" className="w-full sm:w-auto bg-perkos-purple hover:bg-perkos-magenta min-w-[180px]" asChild>
-                <Link href="https://stack.perkos.xyz">
-                  Build with Stack
-                </Link>
+                <Link href="https://stack.perkos.xyz">Explore Stack</Link>
               </Button>
               <Button size="lg" variant="outline" className="w-full sm:w-auto min-w-[180px] border-perkos-pink/50 hover:border-perkos-pink hover:bg-perkos-pink/10" asChild>
-                <Link href="https://github.com/PerkOS-xyz/PerkOS">
-                  View on GitHub
-                </Link>
+                <Link href="https://github.com/PerkOS-xyz/PerkOS">View on GitHub</Link>
               </Button>
             </div>
             <div className="pt-4 sm:pt-8">
@@ -1223,101 +996,45 @@ export default async function Home() {
       {/* Footer */}
       <footer className="border-t py-8 sm:py-12 bg-muted">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-6 sm:gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
             <div className="col-span-2 md:col-span-1">
               <div className="flex items-center gap-2 mb-4">
-                <Image
-                  src="/images/PerkOS-icon.png"
-                  alt="PerkOS"
-                  width={32}
-                  height={32}
-                  className="rounded-lg"
-                />
+                <Image src="/images/PerkOS-icon.png" alt="PerkOS" width={32} height={32} className="rounded-lg" />
                 <span className="font-bold">PerkOS</span>
               </div>
               <p className="text-sm text-muted-foreground">
-                The Operating System for AI Agents
+                Infrastructure for the agentic economy.
               </p>
             </div>
             <div>
               <h3 className="font-semibold mb-4">Products</h3>
               <ul className="space-y-2 text-sm">
-                <li>
-                  <Link href="https://spark.perkos.xyz" className="text-muted-foreground hover:text-foreground">
-                    Spark
-                  </Link>
-                </li>
-                <li>
-                  <Link href="https://stack.perkos.xyz" className="text-muted-foreground hover:text-foreground">
-                    Stack
-                  </Link>
-                </li>
-                <li>
-                  <Link href="https://www.npmjs.com/org/perkos" className="text-muted-foreground hover:text-foreground">
-                    npm Packages
-                  </Link>
-                </li>
+                <li><Link href="https://stack.perkos.xyz" className="text-muted-foreground hover:text-foreground">Stack</Link></li>
+                <li><Link href="https://spark.perkos.xyz" className="text-muted-foreground hover:text-foreground">Spark</Link></li>
+                <li><Link href="https://aura.perkos.xyz" className="text-muted-foreground hover:text-foreground">Aura</Link></li>
+                <li><Link href="https://swarm.perkos.xyz" className="text-muted-foreground hover:text-foreground">Swarm</Link></li>
               </ul>
             </div>
             <div>
               <h3 className="font-semibold mb-4">Resources</h3>
               <ul className="space-y-2 text-sm">
-                <li>
-                  <Link href="https://github.com/PerkOS-xyz/PerkOS" className="text-muted-foreground hover:text-foreground">
-                    Documentation
-                  </Link>
-                </li>
-                <li>
-                  <Link href="https://github.com/PerkOS-xyz" className="text-muted-foreground hover:text-foreground">
-                    GitHub
-                  </Link>
-                </li>
-                <li>
-                  <Link href="https://www.x402.org/" className="text-muted-foreground hover:text-foreground">
-                    x402 Protocol
-                  </Link>
-                </li>
+                <li><Link href="https://github.com/PerkOS-xyz/PerkOS" className="text-muted-foreground hover:text-foreground">Documentation</Link></li>
+                <li><Link href="https://github.com/PerkOS-xyz" className="text-muted-foreground hover:text-foreground">GitHub</Link></li>
+                <li><Link href="https://www.npmjs.com/org/perkos" className="text-muted-foreground hover:text-foreground">npm Packages</Link></li>
+                <li><Link href="https://www.x402.org/" className="text-muted-foreground hover:text-foreground">x402 Protocol</Link></li>
               </ul>
             </div>
             <div>
               <h3 className="font-semibold mb-4">Community</h3>
               <ul className="space-y-2 text-sm">
-                <li>
-                  <Link href="https://x.com/perk_os" className="text-muted-foreground hover:text-foreground">
-                    X (Twitter)
-                  </Link>
-                </li>
-                <li>
-                  <Link href="https://farcaster.xyz/perkos" className="text-muted-foreground hover:text-foreground">
-                    Farcaster
-                  </Link>
-                </li>
-                <li>
-                  <Link href="https://github.com/PerkOS-xyz" className="text-muted-foreground hover:text-foreground">
-                    GitHub
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-4">Contact</h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <Link href="#contact" className="text-muted-foreground hover:text-foreground">
-                    Contact Form
-                  </Link>
-                </li>
-                <li>
-                  <Link href="mailto:contact@perkos.xyz" className="text-muted-foreground hover:text-foreground">
-                    contact@perkos.xyz
-                  </Link>
-                </li>
+                <li><Link href="https://x.com/perk_os" className="text-muted-foreground hover:text-foreground">X (Twitter)</Link></li>
+                <li><Link href="https://farcaster.xyz/perkos" className="text-muted-foreground hover:text-foreground">Farcaster</Link></li>
+                <li><Link href="mailto:contact@perkos.xyz" className="text-muted-foreground hover:text-foreground">contact@perkos.xyz</Link></li>
               </ul>
             </div>
           </div>
           <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t text-center text-xs sm:text-sm text-muted-foreground">
-            <p>© 2025 PerkOS. Built for the agentic economy.</p>
-            <p className="mt-2">Spark ignites. Stack powers.</p>
+            <p>&copy; {new Date().getFullYear()} PerkOS. Infrastructure for the agentic economy.</p>
           </div>
         </div>
       </footer>
