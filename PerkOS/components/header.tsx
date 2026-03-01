@@ -5,10 +5,8 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 
 const navItems = [
-  { label: "Stack", href: "#stack" },
-  { label: "Spark", href: "#spark" },
-  { label: "Swarm", href: "#swarm" },
-  { label: "Features", href: "#features" },
+  { label: "Products", href: "#products" },
+  { label: "How It Works", href: "#how-it-works" },
   { label: "Pricing", href: "#pricing" },
   { label: "Contact", href: "#contact" },
 ];
@@ -16,6 +14,7 @@ const navItems = [
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,6 +24,27 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    const sectionIds = navItems.map((item) => item.href.replace("#", ""));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: "-20% 0px -60% 0px" }
+    );
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
       <header
@@ -32,7 +52,6 @@ export function Header() {
           scrolled ? "py-2" : "py-4"
         }`}
       >
-        {/* Ambient glow that appears on scroll */}
         <div
           className={`absolute inset-0 transition-opacity duration-700 ${
             scrolled ? "opacity-100" : "opacity-0"
@@ -49,26 +68,10 @@ export function Header() {
                 : "px-2 py-3"
             }`}
           >
-            {/* Animated gradient border overlay (visible when scrolled) */}
-            <div
-              className={`absolute inset-0 rounded-2xl transition-opacity duration-500 pointer-events-none ${
-                scrolled ? "opacity-100" : "opacity-0"
-              }`}
-            >
-              <div className="absolute inset-[-1px] rounded-2xl bg-gradient-to-r from-perkos-orange/20 via-perkos-pink/30 to-perkos-purple/20 animate-gradient-x" />
-              <div className="absolute inset-0 rounded-2xl bg-[#0E0716]/80 backdrop-blur-xl" />
-            </div>
-
-            {/* Content layer */}
             <div className="relative z-10 flex items-center justify-between w-full">
               {/* Logo */}
-              <Link
-                href="/"
-                className="flex items-center gap-2.5 group"
-              >
+              <Link href="/" className="flex items-center gap-2.5 group">
                 <div className="relative">
-                  {/* Logo glow effect */}
-                  <div className="absolute inset-0 bg-perkos-pink/30 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-150" />
                   <Image
                     src="/images/PerkOS-icon.png"
                     alt="PerkOS"
@@ -84,17 +87,24 @@ export function Header() {
 
               {/* Desktop Navigation */}
               <div className="hidden md:flex items-center gap-1">
-                {navItems.map((item, index) => (
+                {navItems.map((item) => (
                   <Link
                     key={item.label}
                     href={item.href}
-                    className="nav-item relative px-4 py-2 text-sm font-medium text-white/70 hover:text-white transition-colors duration-300 group"
-                    style={{ animationDelay: `${index * 50}ms` }}
+                    className={`nav-item relative px-4 py-2 text-sm font-medium transition-colors duration-300 group ${
+                      activeSection === item.href.replace("#", "")
+                        ? "text-white"
+                        : "text-white/70 hover:text-white"
+                    }`}
                   >
                     <span className="relative z-10">{item.label}</span>
-                    {/* Hover underline effect */}
-                    <span className="absolute bottom-1 left-4 right-4 h-px bg-gradient-to-r from-perkos-orange via-perkos-pink to-perkos-pink scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-                    {/* Hover background glow */}
+                    <span
+                      className={`absolute bottom-1 left-4 right-4 h-px bg-gradient-to-r from-perkos-orange via-perkos-pink to-perkos-pink transition-transform duration-300 origin-left ${
+                        activeSection === item.href.replace("#", "")
+                          ? "scale-x-100"
+                          : "scale-x-0 group-hover:scale-x-100"
+                      }`}
+                    />
                     <span className="absolute inset-0 rounded-lg bg-white/[0.03] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </Link>
                 ))}
@@ -102,7 +112,6 @@ export function Header() {
 
               {/* Right side actions */}
               <div className="flex items-center gap-2">
-                {/* GitHub button */}
                 <Link
                   href="https://github.com/PerkOS-xyz/PerkOS"
                   target="_blank"
@@ -119,21 +128,15 @@ export function Header() {
                   <span className="hidden lg:inline">GitHub</span>
                 </Link>
 
-                {/* CTA Button */}
                 <Link
                   href="#get-started"
                   className="relative group px-4 py-2 text-sm font-semibold overflow-hidden rounded-xl"
                 >
-                  {/* Button gradient background */}
                   <div className="absolute inset-0 bg-gradient-to-r from-perkos-orange via-perkos-pink to-perkos-pink transition-all duration-300" />
-                  {/* Shimmer effect */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-                  {/* Glow */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-perkos-orange via-perkos-pink to-perkos-pink opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-300 scale-150" />
                   <span className="relative z-10 text-white">Get Started</span>
                 </Link>
 
-                {/* Mobile menu button */}
                 <button
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                   className="md:hidden relative p-2 text-white/70 hover:text-white transition-colors"
@@ -171,13 +174,11 @@ export function Header() {
             : "opacity-0 pointer-events-none"
         }`}
       >
-        {/* Backdrop */}
         <div
           className="absolute inset-0 bg-[#0E0716]/95 backdrop-blur-xl"
           onClick={() => setMobileMenuOpen(false)}
         />
 
-        {/* Menu content */}
         <div
           className={`absolute top-20 left-4 right-4 bg-[#1B1833]/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 transform transition-all duration-500 ${
             mobileMenuOpen
@@ -193,10 +194,7 @@ export function Header() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="px-4 py-3 text-lg font-medium text-white/80 hover:text-white hover:bg-white/[0.05] rounded-xl transition-all duration-300"
                 style={{
-                  animationDelay: `${index * 50}ms`,
-                  transform: mobileMenuOpen
-                    ? "translateX(0)"
-                    : "translateX(-20px)",
+                  transform: mobileMenuOpen ? "translateX(0)" : "translateX(-20px)",
                   opacity: mobileMenuOpen ? 1 : 0,
                   transition: `all 0.3s ease ${index * 0.05}s`,
                 }}
@@ -230,7 +228,6 @@ export function Header() {
         </div>
       </div>
 
-      {/* Spacer to prevent content from going under fixed header */}
       <div className="h-20" />
     </>
   );
