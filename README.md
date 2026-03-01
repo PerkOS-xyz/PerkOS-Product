@@ -429,7 +429,7 @@ PerkOS is open source and we welcome contributions. See individual product repos
 
 ## License
 
-MIT License. See [LICENSE](LICENSE) for details.
+Business Source License. See [LICENSE](LICENSE) for details.
 
 ---
 
