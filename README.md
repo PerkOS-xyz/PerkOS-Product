@@ -23,7 +23,7 @@ Deploy, manage, and scale AI agents across your organization with built-in micro
   <img src="Media/marketing.png" alt="PerkOS Platform Overview" style="max-height: 512px;" />
 </p>
 
-### Why PerkOS
+### Why PerkOS Now
 
 - **$0.0001** minimum transaction -- sub-cent micropayments on L2
 - **< 2 second** settlement -- instant, zero chargebacks
