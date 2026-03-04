@@ -141,7 +141,7 @@ const ContributorCard = ({ contributor, className = "" }: { contributor: Contrib
                   />
                 ) : (
                   <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${colors.bg} text-3xl font-bold ${colors.text}`}>
-                    {contributor.name.charAt(0).toUpperCase()}
+                    {(contributor.name ?? "?").charAt(0).toUpperCase()}
                   </div>
                 )}
               </div>
