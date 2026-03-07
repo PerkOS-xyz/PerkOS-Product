@@ -54,6 +54,9 @@ export const metadata: Metadata = {
     site: "@PerkOS_xyz",
     images: ["/images/PerkOS.png"],
   },
+  other: {
+    "talentapp:project_verification": "0f06f10f203f21292eb4936326d8d5007d9956c5d2ea9cab37e1b81a46d4ee01ea1640af6cf29aaea6a10ca9f964f26cb34827197722a117423f388444ac0827",
+  },
 };
 
 export default function RootLayout({
