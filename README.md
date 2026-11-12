@@ -6,6 +6,8 @@
 
 > **Infrastructure for the Agentic Economy**
 
+> This document describes earlier PerkOS products (Spark, Aura, Swarm). For PerkOS today, AI teams for small businesses, see [perkos.xyz](https://perkos.xyz) and the [FAQ](https://perkos.xyz/faq).
+
 Deploy, manage, and scale AI agents across your organization with built-in micropayments, on-chain identity, and fleet orchestration.
 
 [![Website](https://img.shields.io/badge/Website-perkos.xyz-purple)](https://perkos.xyz)
@@ -133,7 +135,7 @@ graph TB
         API[REST API<br/>Agent Management]
         X402[x402 Facilitator<br/>Micropayments]
         DISC[Discovery Service<br/>Agent Registry]
-        PAY[Payment System<br/>USDC / $PerkOS / $SelfClaw]
+        PAY[Payment System<br/>USDC]
         REP[ERC-8004<br/>Identity & Reputation]
     end
 
@@ -258,7 +260,7 @@ Visit [aura.perkos.xyz](https://aura.perkos.xyz) to access 20 AI endpoints. No A
 
 ## Pricing
 
-All products accept **USDC**, **$PerkOS**, and **$SelfClaw** tokens.
+Payments are in **USDC**.
 
 ### Spark (Credit-based)
 
@@ -269,8 +271,6 @@ All products accept **USDC**, **$PerkOS**, and **$SelfClaw** tokens.
 | **Pro**        | 75,000    | All            | $29/mo |
 | **Scale**      | 300,000   | All + Priority | $99/mo |
 | **Enterprise** | Unlimited | All + SLA      | Custom |
-
-Earn 5% back in **$PerkOS** tokens on every package purchase.
 
 ### Stack (API Usage)
 
@@ -298,25 +298,18 @@ Pay-per-call micropayments from **$0.0001/call** via x402. No subscriptions.
 
 ---
 
-## Tokens
+## PERKOS token
 
-### $PerkOS
+PERKOS is the community token of PerkOS. It was launched on Base, Robinhood Chain and Solana as three separate tokens with no bridge between them, and the Base token is also bridged to Celo. PerkOS is priced in USDC and does not require PERKOS.
 
-Utility token for the PerkOS ecosystem. Used for payments, governance, and earn-back rewards.
+| Network | Contract Address |
+| ------- | ---------------- |
+| **Base** | [`0xF714E60f85497D70508F7E356b5DB80e64539BA3`](https://basescan.org/token/0xF714E60f85497D70508F7E356b5DB80e64539BA3) |
+| **Robinhood Chain** | [`0x56663EcFbe0547B493d348D5fc30De521864Eba3`](https://robinhoodchain.blockscout.com/token/0x56663EcFbe0547B493d348D5fc30De521864Eba3) |
+| **Solana** | [`GvZ9UXZm8U14uZNi7hBN5cY2iUta7stArZE486yHe2nA`](https://solscan.io/token/GvZ9UXZm8U14uZNi7hBN5cY2iUta7stArZE486yHe2nA) |
+| **Celo** (Base token, bridged) | [`0xb7Ba43fBD4F2E85FCE929f7d4DFE3905Ae846A46`](https://celoscan.io/token/0xb7Ba43fBD4F2E85FCE929f7d4DFE3905Ae846A46) |
 
-| Network  | Contract Address                                                                                                                       |
-| -------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| **Base** | [`0xF714E60f85497D70508F7E356b5DB80e64539BA3`](https://app.uniswap.org/explore/tokens/base/0xf714e60f85497d70508f7e356b5db80e64539ba3) |
-| **Celo** | [`0xb7Ba43fBD4F2E85FCE929f7d4DFE3905Ae846A46`](https://app.uniswap.org/explore/tokens/celo/0xb7ba43fbd4f2e85fce929f7d4dfe3905ae846a46) |
-
-### $SelfClaw
-
-Community token accepted across all PerkOS products.
-
-| Network  | Contract Address                                                                                                                       |
-| -------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| **Base** | [`0x9ae5f51d81ff510bf961218f833f79d57bfbab07`](https://app.uniswap.org/explore/tokens/base/0x9ae5f51d81ff510bf961218f833f79d57bfbab07) |
-| **Celo** | [`0xCD88f99Adf75A9110c0bcd22695A32A20eC54ECb`](https://app.uniswap.org/explore/tokens/celo/0xcd88f99adf75a9110c0bcd22695a32a20ec54ecb) |
+The official list and how to verify a contract: [perkos.xyz/token](https://perkos.xyz/token).
 
 ---
 
@@ -326,7 +319,7 @@ Community token accepted across all PerkOS products.
 | ------------------ | ------------------------------------------------------------ |
 | **Protocol**       | x402 (HTTP 402), ERC-8004 (on-chain identity)                |
 | **Blockchain**     | Base, Optimism, Arbitrum, Polygon, Celo, Ethereum, Avalanche |
-| **Payments**       | USDC, $PerkOS, $SelfClaw                                     |
+| **Payments**       | USDC                                                         |
 | **Platforms**      | Discord, Telegram, Twitch, Kick, X, Farcaster                |
 | **Frontend**       | Next.js 15, React, TypeScript, Tailwind CSS 4                |
 | **Backend**        | Node.js, TypeScript                                          |
@@ -384,7 +377,6 @@ PerkOS/
 - Landing site with waitlist capture
 - x402 protocol integration
 - 7+ network support
-- $PerkOS and $SelfClaw token deployment on Base and Celo
 
 ### In Progress (Q1 2026)
 
